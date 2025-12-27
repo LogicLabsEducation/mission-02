@@ -67,7 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
             this.playTone(150, 'sawtooth', 0.5, 0.15);
             this.playTone(100, 'sawtooth', 0.5, 0.1);
         }
+
+        playTypeSound() {
+            // High-pitched short chirp for typing
+            this.playTone(1200 + Math.random() * 400, 'sine', 0.02, 0.02);
+        }
     }
+
 
     const audio = new AudioSystem();
 
@@ -113,6 +119,46 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
 
     async function init() {
+        // Run Briefing Animation after user interaction (to allow audio)
+        if (startOverlay) {
+            // Add a temporary "click to start" listener
+            const initialHandler = () => {
+                audio.init();
+                audio.resume();
+                audio.playTone(400, 'sine', 0.1, 0.1);
+
+                // Clear the overlay content for the briefing
+                const briefingBox = startOverlay.querySelector('.briefing-box');
+                const briefingContent = briefingBox.querySelector('.briefing-content');
+                briefingContent.style.visibility = 'visible';
+
+                startOverlay.removeEventListener('click', initialHandler);
+                startOverlay.style.cursor = 'default';
+
+                // Remove the "click to start" prompt if we added one
+                const prompt = startOverlay.querySelector('.init-prompt');
+                if (prompt) prompt.remove();
+
+                runBriefing();
+            };
+
+            startOverlay.style.cursor = 'pointer';
+            startOverlay.addEventListener('click', initialHandler);
+
+            // Add visual cue to click
+            const prompt = document.createElement('p');
+            prompt.className = 'init-prompt';
+            prompt.innerText = "[ CLICK TO DECRYPT MISSION ]";
+            prompt.style.textAlign = 'center';
+            prompt.style.color = 'var(--accent-cyan)';
+            prompt.style.marginTop = '2rem';
+            prompt.style.animation = 'blinker 1.5s infinite';
+            startOverlay.querySelector('.briefing-box').appendChild(prompt);
+
+            // Hide the actual content until clicked
+            startOverlay.querySelector('.briefing-content').style.visibility = 'hidden';
+        }
+
         // Attach initial sounds (optional here, will re-attach after audio init)
         attachButtonSounds('button, .btn-compare, .next-btn');
 
@@ -128,6 +174,44 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    async function runBriefing() {
+        const texts = [
+            "> SITUATION: Zeta Station's oxygen mix is unstable.",
+            "> OBJECTIVE: Compare pressure levels in TANK A and TANK B.",
+            "> TASK: Identify the larger fraction to stabilize the sector.",
+            "> WARNING: Errors will cause pressure imbalances."
+        ];
+
+        for (let i = 0; i < texts.length; i++) {
+            await typeWriter(`type-${i + 1}`, texts[i], 30);
+            await new Promise(r => setTimeout(r, 400));
+        }
+
+        // Show button
+        if (startBtn) {
+            startBtn.style.opacity = '1';
+            startBtn.style.transform = 'translateY(0)';
+            audio.playTone(600, 'sine', 0.2, 0.1); // Notification sound
+        }
+    }
+
+    async function typeWriter(elementId, text, speed) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+
+        for (let i = 0; i < text.length; i++) {
+            el.innerHTML += text.charAt(i);
+
+            // Randomly play typing sound
+            if (Math.random() > 0.3) {
+                audio.playTypeSound();
+            }
+
+            await new Promise(r => setTimeout(r, speed));
+        }
+    }
+
 
     async function loadGameData() {
         // Check URL Params for Teacher Mode
@@ -167,9 +251,20 @@ document.addEventListener('DOMContentLoaded', () => {
             sectorIndicator.innerText = `SECTOR: ${puzzle.sector}`;
         }
 
-        // Update Text
-        fractionA_Text.innerText = `${puzzle.fractionA.n}/${puzzle.fractionA.d}`;
-        fractionB_Text.innerText = `${puzzle.fractionB.n}/${puzzle.fractionB.d}`;
+        // Update Text (Stacked Math Fraction)
+        fractionA_Text.innerHTML = `
+            <div class="math-fraction">
+                <span class="num">${puzzle.fractionA.n}</span>
+                <span class="den">${puzzle.fractionA.d}</span>
+            </div>
+        `;
+        fractionB_Text.innerHTML = `
+            <div class="math-fraction">
+                <span class="num">${puzzle.fractionB.n}</span>
+                <span class="den">${puzzle.fractionB.d}</span>
+            </div>
+        `;
+
 
         // Reset Visuals
         comparisonContainer.classList.remove('shake');

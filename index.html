@@ -55,18 +55,23 @@
         </div>
 
     </main>
-    
+
     <!-- Mission Briefing Overlay -->
     <div id="start-overlay">
-        <div class="message-box">
-            <h1 class="message-title" style="color: var(--accent-cyan);">MISSION BRIEFING</h1>
-            <div style="text-align: left; margin: 2rem 0; line-height: 1.6; color: var(--text-color);">
-                <p>> <strong style="color: gold;">SITUATION:</strong> Zeta Station's oxygen mix is unstable.</p>
-                <p>> <strong style="color: gold;">OBJECTIVE:</strong> Compare pressure levels in TANK A and TANK B.</p>
-                <p>> <strong style="color: gold;">TASK:</strong> Identify the larger fraction to stabilize the sector.</p>
-                <p>> <strong style="color: gold;">WARNING:</strong> Errors will cause pressure imbalances.</p>
+        <div class="bg-particles"></div>
+        <div class="scanlines"></div>
+        <div class="message-box briefing-box">
+            <h1 class="message-title glow-text">MISSION BRIEFING</h1>
+            <div class="briefing-content"
+                style="text-align: left; margin: 2rem 0; line-height: 1.6; color: var(--text-color);">
+                <p id="type-1"></p>
+                <p id="type-2"></p>
+                <p id="type-3"></p>
+                <p id="type-4"></p>
             </div>
-            <button id="start-btn" class="next-btn" style="width: 100%;">START MISSION</button>
+            <button id="start-btn" class="next-btn"
+                style="width: 100%; opacity: 0; transform: translateY(20px); transition: all 0.5s;">START
+                MISSION</button>
         </div>
     </div>
 

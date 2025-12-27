@@ -163,12 +163,35 @@ main {
     font-weight: bold;
     color: #fff;
     background: #000;
-    padding: 0.5rem 1rem;
+    padding: 0.8rem 1rem;
     border: 1px solid #555;
     border-radius: 4px;
-    min-width: 80px;
+    min-width: 90px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+/* Math Stacked Fraction */
+.math-fraction {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: middle;
+    align-items: center;
+    line-height: 1.1;
+}
+
+.math-fraction .num {
+    padding: 0 0.3rem;
+    border-bottom: 2px solid var(--accent-cyan);
+    margin-bottom: 2px;
+}
+
+.math-fraction .den {
+    padding: 0 0.3rem;
+}
+
 
 /* Controls */
 .controls-module {
@@ -292,7 +315,109 @@ main {
 #start-overlay {
     display: flex;
     /* Show by default */
+    background: radial-gradient(circle at center, #1a237e 0%, #0d1117 100%);
+    overflow: hidden;
 }
+
+.scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+            rgba(18, 16, 16, 0) 50%,
+            rgba(0, 0, 0, 0.25) 50%),
+        linear-gradient(90deg,
+            rgba(255, 0, 0, 0.06),
+            rgba(0, 255, 0, 0.02),
+            rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+    z-index: 101;
+}
+
+.bg-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background:
+        radial-gradient(1px 1px at 20px 30px, #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(1.5px 1.5px at 100px 150px, #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(1px 1px at 200px 250px, #00f0ff, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 350px 50px, #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(1px 1px at 450px 300px, #00f0ff, rgba(0, 0, 0, 0));
+    background-size: 500px 500px;
+    animation: snow 20s linear infinite;
+    opacity: 0.3;
+}
+
+@keyframes snow {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 500px 1000px;
+    }
+}
+
+.briefing-box {
+    backdrop-filter: blur(10px);
+    background: rgba(22, 27, 34, 0.85);
+    border: 2px solid var(--accent-cyan);
+    position: relative;
+    z-index: 102;
+    animation: box-glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes box-glow {
+    from {
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+
+    to {
+        box-shadow: 0 0 50px rgba(0, 240, 255, 0.5);
+    }
+}
+
+.glow-text {
+    text-shadow: 0 0 10px var(--accent-cyan), 0 0 20px var(--accent-cyan);
+    animation: text-flicker 3s linear infinite;
+}
+
+@keyframes text-flicker {
+
+    0%,
+    19.999%,
+    22%,
+    62.999%,
+    64%,
+    64.999%,
+    70%,
+    100% {
+        opacity: 1;
+    }
+
+    20%,
+    21.999%,
+    63%,
+    63.999%,
+    65%,
+    69.999% {
+        opacity: 0.4;
+    }
+}
+
+.briefing-content p {
+    margin: 0.8rem 0;
+    min-height: 1.2em;
+    /* Prevent layout jump during typewriter */
+}
+
 
 
 .message-box {
