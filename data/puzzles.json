@@ -1,0 +1,132 @@
+[
+  {
+    "level": 1,
+    "sector": "ALPHA",
+    "fractionA": {
+      "n": 1,
+      "d": 4
+    },
+    "fractionB": {
+      "n": 3,
+      "d": 4
+    },
+    "code": "75"
+  },
+  {
+    "level": 2,
+    "sector": "ALPHA",
+    "fractionA": {
+      "n": 1,
+      "d": 2
+    },
+    "fractionB": {
+      "n": 1,
+      "d": 8
+    },
+    "code": "12"
+  },
+  {
+    "level": 3,
+    "sector": "BETA",
+    "fractionA": {
+      "n": 2,
+      "d": 4
+    },
+    "fractionB": {
+      "n": 4,
+      "d": 8
+    },
+    "code": "50"
+  },
+  {
+    "level": 4,
+    "sector": "BETA",
+    "fractionA": {
+      "n": 2,
+      "d": 3
+    },
+    "fractionB": {
+      "n": 2,
+      "d": 6
+    },
+    "code": "33"
+  },
+  {
+    "level": 5,
+    "sector": "GAMMA",
+    "fractionA": {
+      "n": 3,
+      "d": 5
+    },
+    "fractionB": {
+      "n": 7,
+      "d": 10
+    },
+    "code": "70"
+  },
+  {
+    "level": 6,
+    "sector": "GAMMA",
+    "fractionA": {
+      "n": 4,
+      "d": 6
+    },
+    "fractionB": {
+      "n": 5,
+      "d": 12
+    },
+    "code": "66"
+  },
+  {
+    "level": 7,
+    "sector": "DELTA",
+    "fractionA": {
+      "n": 5,
+      "d": 8
+    },
+    "fractionB": {
+      "n": 1,
+      "d": 2
+    },
+    "code": "62"
+  },
+  {
+    "level": 8,
+    "sector": "DELTA",
+    "fractionA": {
+      "n": 2,
+      "d": 5
+    },
+    "fractionB": {
+      "n": 3,
+      "d": 4
+    },
+    "code": "40"
+  },
+  {
+    "level": 9,
+    "sector": "OMEGA",
+    "fractionA": {
+      "n": 11,
+      "d": 12
+    },
+    "fractionB": {
+      "n": 5,
+      "d": 6
+    },
+    "code": "91"
+  },
+  {
+    "level": 10,
+    "sector": "OMEGA",
+    "fractionA": {
+      "n": 9,
+      "d": 10
+    },
+    "fractionB": {
+      "n": 90,
+      "d": 100
+    },
+    "code": "90"
+  }
+]

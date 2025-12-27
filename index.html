@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Lab: Mission 02</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Logic Lab <span style="font-size:0.6em; opacity:0.7">// Mission 02</span></h1>
+        <div style="display:flex; gap:10px;">
+            <div class="status-badge" id="sector-indicator">SECTOR: ALPHA</div>
+            <div class="status-badge" id="level-indicator">LEVEL 1 / 10</div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Status Feed -->
+        <div id="status-feed">
+            <span id="status-text">> SYSTEM INITIALIZED...</span><span class="blink">_</span>
+        </div>
+
+        <!-- Comparison UI -->
+        <div class="comparison-container">
+
+            <!-- Tank A -->
+            <div class="tank-module">
+                <span class="tank-label">TANK A</span>
+                <div class="tank-glass">
+                    <div class="liquid" id="liquid-a"></div>
+                </div>
+                <div class="fraction-display" id="fraction-a-text">--/--</div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-module">
+                <button class="btn-compare" onclick="checkAnswer('<')">&lt;</button>
+                <button class="btn-compare" onclick="checkAnswer('=')">=</button>
+                <button class="btn-compare" onclick="checkAnswer('>')">&gt;</button>
+            </div>
+
+            <!-- Tank B -->
+            <div class="tank-module">
+                <span class="tank-label">TANK B</span>
+                <div class="tank-glass">
+                    <div class="liquid" id="liquid-b"></div>
+                </div>
+                <div class="fraction-display" id="fraction-b-text">--/--</div>
+            </div>
+
+        </div>
+
+    </main>
+    
+    <!-- Mission Briefing Overlay -->
+    <div id="start-overlay">
+        <div class="message-box">
+            <h1 class="message-title" style="color: var(--accent-cyan);">MISSION BRIEFING</h1>
+            <div style="text-align: left; margin: 2rem 0; line-height: 1.6; color: var(--text-color);">
+                <p>> <strong style="color: gold;">SITUATION:</strong> Zeta Station's oxygen mix is unstable.</p>
+                <p>> <strong style="color: gold;">OBJECTIVE:</strong> Compare pressure levels in TANK A and TANK B.</p>
+                <p>> <strong style="color: gold;">TASK:</strong> Identify the larger fraction to stabilize the sector.</p>
+                <p>> <strong style="color: gold;">WARNING:</strong> Errors will cause pressure imbalances.</p>
+            </div>
+            <button id="start-btn" class="next-btn" style="width: 100%;">START MISSION</button>
+        </div>
+    </div>
+
+
+    <!-- Success/Message Overlay -->
+    <div id="message-overlay">
+        <div class="message-box">
+            <h2 id="msg-title" class="message-title">TITLE</h2>
+            <p id="msg-body">Message body text goes here.</p>
+            <button id="next-btn" class="next-btn">CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- Certificate Overlay -->
+    <div id="certificate-overlay" class="no-print">
+        <div class="message-box">
+            <h2 class="message-title" style="color: gold;">MISSION ACCOMPLISHED</h2>
+            <p style="margin-bottom: 2rem;">All sectors stabilized. Enter your name to receive official commendation.
+            </p>
+
+            <input type="text" id="student-name" placeholder="ENTER AGENT NAME"
+                style="background: #000; border: 2px solid var(--accent-cyan); color: #fff; padding: 1rem; font-family: inherit; font-size: 1.2rem; margin-bottom: 2rem; width: 80%; text-transform: uppercase; text-align: center;">
+
+            <button id="print-cert-btn" class="next-btn"
+                style="background: gold; color: #000; border: 2px solid #fff;">PRINT CERTIFICATE</button>
+        </div>
+    </div>
+
+    <!-- Printable Certificate (Hidden by default, visible on print) -->
+    <div id="printable-certificate" class="printable-only">
+        <div class="cert-border">
+            <h1 class="cert-header">CERTIFICATE OF COMPLETION</h1>
+            <p class="cert-subtitle">AWARDED TO SYSTEMS SPECIALIST</p>
+
+            <h2 id="cert-student-name" class="cert-name">____________</h2>
+
+            <p class="cert-body">
+                For exceptional skill in <strong>FRACTION COMPARISON</strong> and <strong>DATA ANALYSIS</strong>.<br>
+                Successfully stabilized all oxygen levels in the Zeta Station Crisis.
+            </p>
+
+            <div class="cert-footer">
+                <div class="cert-date">DATE: <span id="cert-date">2025-01-01</span></div>
+                <div class="cert-sig">MISSION CONTROL</div>
+            </div>
+
+            <div class="cert-stamp">AUTHORIZED</div>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+
+</html>

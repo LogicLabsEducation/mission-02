@@ -1,0 +1,538 @@
+/* Base Reset & Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap');
+
+:root {
+    --bg-color: #0d1117;
+    --panel-bg: #161b22;
+    --text-color: #c9d1d9;
+    --accent-cyan: #00f0ff;
+    --accent-dim: #004d52;
+    --alert-red: #ff3333;
+    --success-green: #00ff66;
+    --tank-glass: rgba(255, 255, 255, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Share Tech Mono', monospace;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/* Header */
+header {
+    background-color: var(--panel-bg);
+    border-bottom: 2px solid var(--accent-cyan);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 15px var(--accent-dim);
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--accent-cyan);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.status-badge {
+    background: var(--accent-dim);
+    color: var(--accent-cyan);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid var(--accent-cyan);
+    font-weight: bold;
+}
+
+/* Main Layout */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    gap: 1rem;
+}
+
+
+/* Status Feed */
+#status-feed {
+    width: 100%;
+    width: 100%;
+    max-width: 800px;
+    background: #000;
+    border: 1px solid #333;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.blink {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Comparison Interface */
+.comparison-container {
+    display: flex;
+    align-items: flex-end;
+    /* Align bottoms of tanks */
+    gap: 2rem;
+    background: var(--panel-bg);
+    padding: 1.5rem 3rem;
+    border-radius: 10px;
+    border: 1px solid #30363d;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+
+/* Tank Module */
+.tank-module {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 120px;
+}
+
+.tank-label {
+    font-size: 1.2rem;
+    color: var(--accent-cyan);
+}
+
+.tank-glass {
+    width: 80px;
+    height: 300px;
+    background: var(--tank-glass);
+    border: 3px solid #555;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    /* Glass Effect */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Liquid */
+.liquid {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    /* Dynamic */
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-dim));
+    transition: height 1s ease-in-out;
+    box-shadow: 0 0 15px var(--accent-cyan);
+}
+
+/* Bubbles Animation */
+.liquid::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.fraction-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    background: #000;
+    padding: 0.5rem 1rem;
+    border: 1px solid #555;
+    border-radius: 4px;
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Controls */
+.controls-module {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    height: 300px;
+    /* Match tank height for vertical centering */
+}
+
+.btn-compare {
+    background: transparent;
+    border: 2px solid var(--text-color);
+    color: var(--text-color);
+    font-size: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.btn-compare:hover {
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    box-shadow: 0 0 15px var(--accent-cyan);
+    transform: scale(1.1);
+}
+
+/* Visual Feedback */
+.pressure-gauge {
+    width: 100%;
+    max-width: 400px;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
+    margin-top: 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+
+.gauge-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--alert-red), var(--success-green));
+    transition: width 0.5s ease;
+}
+
+/* Animations */
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+/* Modal / Overlay */
+#start-overlay,
+#message-overlay,
+#certificate-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding: 2rem;
+}
+
+#start-overlay {
+    display: flex;
+    /* Show by default */
+}
+
+
+.message-box {
+    background: var(--panel-bg);
+    border: 2px solid var(--accent-cyan);
+    padding: 3rem;
+    text-align: center;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 0 50px var(--accent-cyan);
+}
+
+
+.message-title {
+    font-size: 2rem;
+    color: var(--accent-cyan);
+    margin-bottom: 1rem;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.next-btn {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    background: var(--accent-cyan);
+    color: #000;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.next-btn:hover {
+    background: #fff;
+}
+
+/* --- Certificate Overlay Support --- */
+#certificate-overlay {
+    background: rgba(0, 0, 0, 0.95);
+}
+
+
+.printable-only {
+    display: none !important;
+}
+
+/* --- PRINT STYLES --- */
+@media print {
+
+    /* Hide everything web-app related */
+    body>header,
+    body>main,
+    #message-overlay,
+    #certificate-overlay,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+        color: black;
+        height: auto;
+        overflow: visible;
+        display: block;
+    }
+
+    /* Show Certificate */
+    .printable-only {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+    }
+
+    .cert-border {
+        border: 10px double #004d52;
+        padding: 40px;
+        width: 90%;
+        height: 80%;
+        text-align: center;
+        position: relative;
+    }
+
+    .cert-header {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 3rem;
+        color: #004d52;
+        margin-bottom: 1rem;
+        text-decoration: underline;
+    }
+
+    .cert-subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 3rem;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+    }
+
+    .cert-name {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 4rem;
+        border-bottom: 2px solid black;
+        display: inline-block;
+        min-width: 60%;
+        margin-bottom: 2rem;
+        padding-bottom: 0.5rem;
+        text-transform: uppercase;
+    }
+
+    .cert-body {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin-bottom: 4rem;
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cert-footer {
+        display: flex;
+        justify-content: space-around;
+        font-weight: bold;
+        margin-top: 4rem;
+    }
+
+    .cert-sig,
+    .cert-date {
+        border-top: 1px solid black;
+        padding-top: 10px;
+        width: 200px;
+    }
+
+    .cert-stamp {
+        position: absolute;
+        bottom: 50px;
+        right: 50px;
+        border: 5px solid red;
+        color: red;
+        font-size: 2rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        transform: rotate(-15deg);
+        opacity: 0.8;
+    }
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+
+@media (max-width: 768px) {
+    .comparison-container {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .tank-glass {
+        height: 250px;
+        width: 70px;
+    }
+
+    .controls-module {
+        height: 250px;
+    }
+
+    .btn-compare {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .message-box {
+        padding: 2rem;
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    .status-badge {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    main {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .comparison-container {
+        padding: 1rem;
+        gap: 0.5rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tank-module {
+        width: 80px;
+    }
+
+    .tank-glass {
+        height: 180px;
+        width: 60px;
+    }
+
+    .controls-module {
+        height: 180px;
+        gap: 0.5rem;
+    }
+
+    .btn-compare {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
+    .fraction-display {
+        font-size: 1.1rem;
+        padding: 0.3rem 0.5rem;
+        min-width: 60px;
+    }
+
+    .message-title {
+        font-size: 1.5rem;
+    }
+
+    .next-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    #status-feed {
+        font-size: 0.8rem;
+    }
+}
