@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clue Sheets - Project: Zeta Recovery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --blueprint-blue: #0a192f;
+            --blueprint-line: #172a45;
+            --terminal-green: #4ade80;
+            --terminal-gold: #fbbf24;
+            --text-color: #1a1a1a;
+            --border-style: 2px solid #333;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 20mm;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text-color);
+            background: #fff;
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+        }
+
+        /* --- Header & Footer --- */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            font-size: 10pt;
+        }
+
+        .report-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+        }
+
+        .page-footer {
+            position: absolute;
+            bottom: 15mm;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 10pt;
+            border-top: 1px solid #ddd;
+            padding-top: 5px;
+            background: white;
+        }
+
+        /* --- Page Structure --- */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            padding: 20mm;
+            margin: auto;
+            background: white;
+            page-break-after: always;
+            page-break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            margin-top: 0;
+        }
+
+        .alert-box {
+            border: 4px double #000;
+            padding: 15px;
+            background: #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .problem-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            position: relative;
+        }
+
+        .fraction-math {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            align-items: center;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .fraction-math .num {
+            border-bottom: 2px solid #000;
+            width: 30px;
+            text-align: center;
+        }
+
+        .fraction-math .den {
+            width: 30px;
+            text-align: center;
+        }
+
+        .compare-circle {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #000;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 10px;
+        }
+
+        .drafting-box {
+            border: 1px dashed #666;
+            height: 80px;
+            margin-top: 10px;
+            position: relative;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, #f9f9f9 10px, #f9f9f9 11px);
+        }
+
+        .drafting-box::before {
+            content: "WORK AREA";
+            position: absolute;
+            top: 2px;
+            left: 5px;
+            font-size: 7pt;
+            opacity: 0.5;
+        }
+
+        .tank-visual {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .mini-tank {
+            width: 30px;
+            height: 60px;
+            border: 2px solid #333;
+            position: relative;
+        }
+
+        .mini-tank::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: #ddd;
+        }
+
+        .terminal-code {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 8pt;
+            background: #eee;
+            padding: 2px 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* --- Custom Graphics --- */
+        .denom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .denom-table td {
+            border: 1px solid #333;
+            padding: 5px;
+            text-align: center;
+        }
+
+        /* --- Cheat Sheet --- */
+        .step-box {
+            border-left: 5px solid #172a45;
+            padding-left: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media print {
+
+            /* Remove ALL browser default headers/footers */
+            @page {
+                margin: 0;
+                size: A4 portrait;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white;
+                width: 100%;
+            }
+
+            .page {
+                margin: 0 !important;
+                padding: 20mm !important;
+                border: none !important;
+                box-shadow: none !important;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                max-height: 297mm !important;
+                position: relative !important;
+            }
+
+            /* Ensure cover page gradient prints */
+            .page[style*="gradient"] {
+                background: linear-gradient(135deg, #0a192f 0%, #172a45 100%) !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+
+            /* Fix footer positioning */
+            .page-footer {
+                position: absolute !important;
+                bottom: 10mm !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- COVER PAGE -->
+    <div class="page"
+        style="display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, #0a192f 0%, #172a45 100%); color: white; padding: 25mm 20mm;">
+
+        <!-- Brand Header -->
+        <div style="text-align: center; border-bottom: 2px solid #4ade80; padding-bottom: 15px;">
+            <div style="font-size: 9pt; letter-spacing: 3px; color: #4ade80; font-weight: bold;">LOGIC LABS EDUCATION
+            </div>
+            <div style="font-size: 7pt; color: #aaa; margin-top: 5px;">PREMIUM DIGITAL + PRINTABLE RESOURCES</div>
+        </div>
+
+        <!-- Main Title Section -->
+        <div style="text-align: center; margin-top: 20mm;">
+            <h1
+                style="font-family: 'Orbitron', sans-serif; font-size: 32pt; margin: 0; color: #4ade80; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);">
+                ZETA STATION
+            </h1>
+            <h2 style="font-family: 'Orbitron', sans-serif; font-size: 24pt; margin: 10px 0 0 0; color: white;">
+                MISSION 02: OXYGEN CRISIS
+            </h2>
+            <p style="font-size: 11pt; color: #ccc; margin-top: 15px; font-family: 'Share Tech Mono', monospace;">
+                Comparing Fractions with Unlike Denominators
+            </p>
+        </div>
+
+        <!-- Value Propositions Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px;">
+
+            <!-- Feature Box 1 -->
+            <div
+                style="background: rgba(255,255,255,0.05); border: 2px solid #4ade80; padding: 15px; border-radius: 8px;">
+                <div style="font-size: 24pt; text-align: center; margin-bottom: 8px;">🎮</div>
+                <h3
+                    style="color: #4ade80; font-size: 10pt; margin: 0 0 8px 0; text-align: center; font-family: 'Orbitron', sans-serif;">
+                    DIGITAL + PRINTABLE</h3>
+                <p style="font-size: 8pt; margin: 0; line-height: 1.4; color: #ddd; text-align: center;">Interactive web
+                    terminal validates student answers instantly</p>
+            </div>
+
+            <!-- Feature Box 2 -->
+            <div
+                style="background: rgba(255,255,255,0.05); border: 2px solid #fbbf24; padding: 15px; border-radius: 8px;">
+                <div style="font-size: 24pt; text-align: center; margin-bottom: 8px;">✓</div>
+                <h3
+                    style="color: #fbbf24; font-size: 10pt; margin: 0 0 8px 0; text-align: center; font-family: 'Orbitron', sans-serif;">
+                    100% SELF-CHECKING</h3>
+                <p style="font-size: 8pt; margin: 0; line-height: 1.4; color: #ddd; text-align: center;">Students get
+                    immediate feedback - saves YOU hours of grading!</p>
+            </div>
+
+            <!-- Feature Box 3 -->
+            <div
+                style="background: rgba(255,255,255,0.05); border: 2px solid #60a5fa; padding: 15px; border-radius: 8px;">
+                <div style="font-size: 24pt; text-align: center; margin-bottom: 8px;">📚</div>
+                <h3
+                    style="color: #60a5fa; font-size: 10pt; margin: 0 0 8px 0; text-align: center; font-family: 'Orbitron', sans-serif;">
+                    CCSS ALIGNED</h3>
+                <p style="font-size: 8pt; margin: 0; line-height: 1.4; color: #ddd; text-align: center;">Grades 3, 4, 5
+                    • Fraction comparison standards perfectly matched</p>
+            </div>
+
+            <!-- Feature Box 4 -->
+            <div
+                style="background: rgba(255,255,255,0.05); border: 2px solid #ec4899; padding: 15px; border-radius: 8px;">
+                <div style="font-size: 24pt; text-align: center; margin-bottom: 8px;">🚀</div>
+                <h3
+                    style="color: #ec4899; font-size: 10pt; margin: 0 0 8px 0; text-align: center; font-family: 'Orbitron', sans-serif;">
+                    ENGAGEMENT PROVEN</h3>
+                <p style="font-size: 8pt; margin: 0; line-height: 1.4; color: #ddd; text-align: center;">Space mission
+                    theme keeps students motivated and on-task</p>
+            </div>
+
+        </div>
+
+        <!-- What's Included Section -->
+        <div
+            style="background: rgba(74, 222, 128, 0.1); border: 2px solid #4ade80; padding: 20px; margin-top: 25px; border-radius: 8px;">
+            <h3
+                style="color: #4ade80; text-align: center; margin: 0 0 15px 0; font-size: 12pt; font-family: 'Orbitron', sans-serif;">
+                ✨ COMPLETE PACKAGE INCLUDES:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 8.5pt; line-height: 1.6;">
+                <div>✓ 10 Scaffolded Fraction Problems</div>
+                <div>✓ QR Code for Instant Access</div>
+                <div>✓ Multiple Solution Methods</div>
+                <div>✓ Teacher Answer Key</div>
+                <div>✓ Student Field Guide/Cheat Sheet</div>
+                <div>✓ Common Denominator Matrix</div>
+                <div>✓ Drafting Boxes & Visual Tools</div>
+                <div>✓ High-Stakes Story Integration</div>
+            </div>
+        </div>
+
+        <!-- Bottom Stats Bar -->
+        <div
+            style="display: flex; justify-content: space-around; margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+            <div style="text-align: center;">
+                <div style="font-size: 20pt; font-weight: bold; color: #4ade80;">10</div>
+                <div style="font-size: 7pt; color: #aaa;">PROBLEMS</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 20pt; font-weight: bold; color: #fbbf24;">6</div>
+                <div style="font-size: 7pt; color: #aaa;">PAGES</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 20pt; font-weight: bold; color: #60a5fa;">3</div>
+                <div style="font-size: 7pt; color: #aaa;">METHODS</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 20pt; font-weight: bold; color: #ec4899;">0</div>
+                <div style="font-size: 7pt; color: #aaa;">GRADING HOURS</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div
+            style="text-align: center; margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 7pt; color: #888;">
+            © 2025 Logic Labs Education | logiclabseducation.github.io/mission-02/
+        </div>
+
+    </div>
+
+    <!-- PAGE 1: MISSION BRIEFING -->
+    <div class="page">
+        <div class="page-header">
+            <div class="report-title">PROJECT: ZETA RECOVERY</div>
+            <div>SECTOR: OXYGEN // BRIEFING</div>
+        </div>
+
+        <h3 style="color: #666; font-size: 10pt; margin-bottom: 5px;">CLASSIFIED: EYES ONLY</h3>
+        <h1>MISSION BRIEFING</h1>
+
+        <div class="alert-box">
+            <h2 style="margin-bottom: 10px; color: #cc0000;">CRITICAL ALERT: OXYGEN LEVELS FLUCTUATING</h2>
+            <p><strong>Cadet Specialist,</strong></p>
+            <p>Our Zeta Station atmospheric sensors are reporting massive pressure variances across all oxygen
+                reservoirs. If the tanks in each sector are not perfectly stabilized, the station's life support will
+                fail.</p>
+            <p><strong>YOUR OBJECTIVE:</strong> Compare the liquid volume in Tank A and Tank B for each sector below.
+                You must identify if the relationship is <strong>LESS THAN (&lt;)</strong>, <strong>GREATER THAN
+                    (&gt;)</strong>, or <strong>EQUAL (=)</strong>.</p>
+            <p><strong>STABILIZATION PROTOCOL:</strong> Once you determine the correct relationship on this report,
+                enter the corresponding <strong>Terminal Code</strong> into the Logic Lab Terminal to lock in the
+                stabilization.</p>
+        </div>
+
+        <div style="background: #172a45; color: #fff; padding: 15px; border-radius: 4px;">
+            <h3 style="margin-top:0">SENSOR LOGS // 2025-Q4</h3>
+            <ul style="list-style: none; padding: 0; font-size: 11pt;">
+                <li>> SECTOR ALPHA: Low Pressure variance detected.</li>
+                <li>> SECTOR BETA: Significant imbalance. Check common denominators.</li>
+                <li>> SECTOR GAMMA: Benchmarking required against standard 1/2 markers.</li>
+                <li>> SECTOR OMEGA: CRITICAL STABILITY - 100 unit threshold.</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center;">
+            <p style="font-size: 14pt; font-weight: bold;">"PRECISION IS THE ONLY PATH TO SURVIVAL."</p>
+            <hr style="width: 50%; opacity: 0.2;">
+        </div>
+
+        <div
+            style="margin-top: 30px; background: linear-gradient(135deg, #172a45 0%, #0a192f 100%); padding: 25px; border: 3px solid #4ade80; border-radius: 8px;">
+            <h3 style="color: #4ade80; text-align: center; margin: 0 0 15px 0; font-size: 14pt; letter-spacing: 2px;">
+                ⚡ DEPLOY TERMINAL NOW ⚡</h3>
+            <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                <div
+                    style="width: 130px; height: 130px; border: 3px solid #4ade80; background: white; display: flex; align-items: center; justify-content: center; padding: 5px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://logiclabseducation.github.io/mission-02/"
+                        alt="Terminal QR Code" style="width: 120px; height: 120px;">
+                </div>
+                <p style="margin-top: 15px; font-size: 11pt; color: white; text-align: center;">SCAN QR CODE WITH YOUR
+                    DEVICE</p>
+                <div style="margin-top: 10px;">
+                    <a href="https://logiclabseducation.github.io/mission-02/" target="_blank"
+                        style="background: #4ade80; color: #0a192f; padding: 12px 30px; font-size: 12pt; font-weight: bold; text-decoration: none; border-radius: 5px; display: inline-block; border: 2px solid #4ade80; text-transform: uppercase; letter-spacing: 1px;">
+                        🚀 CLICK TO LAUNCH TERMINAL 🚀
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            URL: <strong><a href="https://logiclabseducation.github.io/mission-02/" target="_blank"
+                    style="color: inherit; text-decoration: none;">logiclabseducation.github.io/mission-02/</a></strong>
+        </div>
+    </div>
+
+    <!-- PAGE 2: SECTOR ALPHA & BETA -->
+    <div class="page">
+        <div class="page-header">
+            <div class="report-title">PROJECT: ZETA RECOVERY</div>
+            <div>STATUS: ALPHA & BETA SECTORS</div>
+        </div>
+
+        <h2>SECTOR STABILIZATION: PHASE I</h2>
+        <p>Instructions: Shade the "Drafting Tanks" to visualize the levels before making your decision.</p>
+
+        <div class="problem-grid">
+            <!-- Problem 1 -->
+            <div class="problem-card">
+                <div class="terminal-code">CODE: 75</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">1</span><span class="den">4</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">3</span><span class="den">4</span></div>
+                </div>
+                <div class="drafting-box"></div>
+                <div class="tank-visual">
+                    <div class="mini-tank"></div>
+                    <div class="mini-tank" style="margin-right: 20px;"></div>
+                    <span style="font-size: 7pt; align-self: center;">SHADE LEVELS</span>
+                </div>
+            </div>
+
+            <!-- Problem 2 -->
+            <div class="problem-card">
+                <div class="terminal-code">CODE: 12</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">1</span><span class="den">2</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">1</span><span class="den">8</span></div>
+                </div>
+                <div class="drafting-box"></div>
+                <div class="tank-visual">
+                    <div class="mini-tank"></div>
+                    <div class="mini-tank"></div>
+                </div>
+            </div>
+
+            <!-- Problem 3 -->
+            <div class="problem-card">
+                <div class="terminal-code">CODE: 50</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">2</span><span class="den">4</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">4</span><span class="den">8</span></div>
+                </div>
+                <div class="drafting-box"></div>
+                <div class="tank-visual">
+                    <div class="mini-tank"></div>
+                    <div class="mini-tank"></div>
+                </div>
+            </div>
+
+            <!-- Problem 4 -->
+            <div class="problem-card">
+                <div class="terminal-code">CODE: 33</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">2</span><span class="den">3</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">2</span><span class="den">6</span></div>
+                </div>
+                <div class="drafting-box"></div>
+                <div class="tank-visual">
+                    <div class="mini-tank"></div>
+                    <div class="mini-tank"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            URL: <strong><a href="https://logiclabseducation.github.io/mission-02/" target="_blank"
+                    style="color: inherit; text-decoration: none;">logiclabseducation.github.io/mission-02/</a></strong>
+        </div>
+    </div>
+
+    <!-- PAGE 3: SECTOR GAMMA & DELTA -->
+    <div class="page">
+        <div class="page-header">
+            <div class="report-title">PROJECT: ZETA RECOVERY</div>
+            <div>STATUS: GAMMA & DELTA SECTORS</div>
+        </div>
+
+        <h2>SECTOR STABILIZATION: PHASE II</h2>
+        <p>Instructions: Use the Common Denominator Table below to convert fractions before comparing.</p>
+
+        <div class="problem-grid">
+            <!-- Problem 5 -->
+            <div class="problem-card">
+                <div class="terminal-code">CODE: 70</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">3</span><span class="den">5</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">7</span><span class="den">10</span></div>
+                </div>
+                <div class="drafting-box"></div>
+            </div>
+
+            <!-- Problem 6 -->
+            <div class="problem-card">
+                <div class="terminal-code">CODE: 66</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">4</span><span class="den">6</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">5</span><span class="den">12</span></div>
+                </div>
+                <div class="drafting-box"></div>
+            </div>
+
+            <!-- Problem 7 -->
+            <div class="problem-card">
+                <div class="terminal-code">CODE: 62</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">5</span><span class="den">8</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">1</span><span class="den">2</span></div>
+                </div>
+                <div class="drafting-box"></div>
+            </div>
+
+            <!-- Problem 8 -->
+            <div class="problem-card">
+                <div class="terminal-code">CODE: 40</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">2</span><span class="den">5</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">3</span><span class="den">4</span></div>
+                </div>
+                <div class="drafting-box"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <h3>COMMON DENOMINATOR MATRIX</h3>
+            <table class="denom-table">
+                <tr>
+                    <td>x1</td>
+                    <td>x2</td>
+                    <td>x3</td>
+                    <td>x4</td>
+                    <td>x5</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>10</td>
+                    <td>15</td>
+                    <td>20</td>
+                    <td>25</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>12</td>
+                    <td>18</td>
+                    <td>24</td>
+                    <td>30</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>16</td>
+                    <td>24</td>
+                    <td>32</td>
+                    <td>40</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>8</td>
+                    <td>12</td>
+                    <td>16</td>
+                    <td>20</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page-footer">
+            URL: <strong><a href="https://logiclabseducation.github.io/mission-02/" target="_blank"
+                    style="color: inherit; text-decoration: none;">logiclabseducation.github.io/mission-02/</a></strong>
+        </div>
+    </div>
+
+    <!-- PAGE 4: SECTOR OMEGA -->
+    <div class="page">
+        <div class="page-header">
+            <div class="report-title">PROJECT: ZETA RECOVERY</div>
+            <div>STATUS: CRITICAL (OMEGA)</div>
+        </div>
+
+        <h2>FINAL STABILIZATION: OMEGA</h2>
+        <p>CAUTION: High pressure warning. Decimal-equivalent markers detected.</p>
+
+        <div class="problem-grid" style="grid-template-columns: 1fr;">
+            <!-- Problem 9 -->
+            <div class="problem-card" style="margin-bottom: 20px;">
+                <div class="terminal-code">CODE: 91</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">11</span><span class="den">12</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">5</span><span class="den">6</span></div>
+                </div>
+                <div class="drafting-box" style="height: 120px;"></div>
+            </div>
+
+            <!-- Problem 10 -->
+            <div class="problem-card">
+                <div class="terminal-code">CODE: 90</div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="fraction-math"><span class="num">9</span><span class="den">10</span></div>
+                    <div class="compare-circle"></div>
+                    <div class="fraction-math"><span class="num">90</span><span class="den">100</span></div>
+                </div>
+                <div class="drafting-box" style="height: 120px;"></div>
+            </div>
+        </div>
+
+        <div class="alert-box" style="margin-top: 30px; border-color: gold;">
+            <p style="margin:0; font-weight: bold; text-align: center;">MISSION COMPLETION TASK:</p>
+            <p style="margin-bottom: 0;">Once all 10 problems are solved and stabilized in the terminal, generate your
+                <strong>OFFICIAL COMMENDATION</strong> to signify mission success.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            URL: <strong><a href="https://logiclabseducation.github.io/mission-02/" target="_blank"
+                    style="color: inherit; text-decoration: none;">logiclabseducation.github.io/mission-02/</a></strong>
+        </div>
+    </div>
+
+    <!-- PAGE 5: CHEAT SHEET -->
+    <div class="page">
+        <div class="page-header">
+            <div class="report-title">PROJECT: ZETA RECOVERY</div>
+            <div>REF: SPECIALIST CHEAT SHEET</div>
+        </div>
+
+        <h1>Specialist's Field Guide</h1>
+
+        <h3>Method 1: Common Denominator (Safe)</h3>
+        <div class="step-box">
+            <p>1. Find a number both denominators can multiply into.</p>
+            <p>2. Multiply both the top and bottom of each fraction to get that new denominator.</p>
+            <p>3. Compare the new numerators. Higher numerator = Higher volume.</p>
+        </div>
+
+        <h3>Method 2: Cross-Multiplication (Fast)</h3>
+        <div class="step-box">
+            <p>1. Multiply the <strong>Numerator</strong> of Tank A by the <strong>Denominator</strong> of Tank B.
+                (Result A)</p>
+            <p>2. Multiply the <strong>Numerator</strong> of Tank B by the <strong>Denominator</strong> of Tank A.
+                (Result B)</p>
+            <p>3. Compare Result A to Result B. The larger result indicates the larger tank.</p>
+        </div>
+
+        <div style="border: 2px solid #ccc; padding: 15px; background: #fafafa; margin-top: 50px;">
+            <h3 style="margin-top:0">BENCHMARK TIPS:</h3>
+            <p>> If the numerator is exactly half the denominator, it's <strong>1/2 FULL</strong>.</p>
+            <p>> If the numerator is less than half, the tank is <strong>LOW</strong> (&lt; 1/2).</p>
+            <p>> If the numerator is more than half, the tank is <strong>HIGH</strong> (&gt; 1/2).</p>
+        </div>
+
+        <div class="page-footer">
+            URL: <strong><a href="https://logiclabseducation.github.io/mission-02/" target="_blank"
+                    style="color: inherit; text-decoration: none;">logiclabseducation.github.io/mission-02/</a></strong>
+        </div>
+    </div>
+
+    <!-- PAGE 6: QUICK-KEY -->
+    <div class="page">
+        <div class="page-header">
+            <div class="report-title">PROJECT: ZETA RECOVERY</div>
+            <div>STATUS: TEACHER QUICK-KEY [CONFIDENTIAL]</div>
+        </div>
+
+        <h1>OFFICER'S ANSWER KEY</h1>
+
+        <table class="denom-table" style="text-align: left;">
+            <tr>
+                <th style="padding:10px;">SECTOR</th>
+                <th style="padding:10px;">STABILITY CODE</th>
+                <th style="padding:10px;">ANSWER</th>
+            </tr>
+            <tr>
+                <td>1. ALPHA-1</td>
+                <td>75</td>
+                <td>&lt;</td>
+            </tr>
+            <tr>
+                <td>2. ALPHA-2</td>
+                <td>12</td>
+                <td>&gt;</td>
+            </tr>
+            <tr>
+                <td>3. BETA-1</td>
+                <td>50</td>
+                <td>=</td>
+            </tr>
+            <tr>
+                <td>4. BETA-2</td>
+                <td>33</td>
+                <td>&gt;</td>
+            </tr>
+            <tr>
+                <td>5. GAMMA-1</td>
+                <td>70</td>
+                <td>&lt;</td>
+            </tr>
+            <tr>
+                <td>6. GAMMA-2</td>
+                <td>66</td>
+                <td>&gt;</td>
+            </tr>
+            <tr>
+                <td>7. DELTA-1</td>
+                <td>62</td>
+                <td>&gt;</td>
+            </tr>
+            <tr>
+                <td>8. DELTA-2</td>
+                <td>40</td>
+                <td>&lt;</td>
+            </tr>
+            <tr>
+                <td>9. OMEGA-1</td>
+                <td>91</td>
+                <td>&gt;</td>
+            </tr>
+            <tr>
+                <td>10. OMEGA-2</td>
+                <td>90</td>
+                <td>=</td>
+            </tr>
+        </table>
+
+        <div
+            style="margin-top: 100px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+            <div
+                style="width: 150px; height: 150px; border: 1px solid #000; display: flex; align-items: center; justify-content: center; text-align: center;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://logiclabseducation.github.io/mission-02/"
+                    alt="Game QR Code" style="width: 140px; height: 140px;">
+            </div>
+            <p style="margin-top: 10px;">SCAN OR <a href="https://logiclabseducation.github.io/mission-02/"
+                    target="_blank">CLICK</a> TO DEPLOY TERMINAL</p>
+        </div>
+
+    </div>
+
+    <!-- PAGE 8: COMING SOON - MISSION 03 -->
+    <div class="page"
+        style="display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg, #172a45 0%, #0a192f 100%); color: white; padding: 40mm 20mm;">
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="font-size: 48pt; margin-bottom: 20px;">🔥</div>
+            <h1
+                style="font-family: 'Orbitron', sans-serif; font-size: 28pt; margin: 0; color: #fbbf24; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);">
+                COMING SOON
+            </h1>
+        </div>
+
+        <div
+            style="background: rgba(255,255,255,0.1); border: 3px solid #fbbf24; padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 40px; width: 80%;">
+            <h2
+                style="font-family: 'Orbitron', sans-serif; font-size: 20pt; margin: 0 0 15px 0; color: #4ade80; line-height: 1.3;">
+                MISSION 03:<br>THE THERMAL LEAK
+            </h2>
+            <p style="font-size: 14pt; color: #ccc; margin: 15px 0 0 0; font-family: 'Share Tech Mono', monospace;">
+                Adding & Subtracting Fractions
+            </p>
+        </div>
+
+        <div
+            style="background: rgba(74, 222, 128, 0.2); border: 2px solid #4ade80; padding: 25px; border-radius: 8px; text-align: center; width: 70%;">
+            <p style="font-size: 12pt; margin: 0 0 15px 0; line-height: 1.6; color: white;">
+                Follow <strong style="color: #4ade80;">Logic Labs Education</strong> on<br>
+                Teachers Pay Teachers for the next release!
+            </p>
+            <div style="font-size: 32pt; margin-top: 10px;">👉 📚 👈</div>
+        </div>
+
+        <div
+            style="margin-top: 50px; text-align: center; font-size: 8pt; color: #888; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; width: 100%;">
+            © 2025 Logic Labs Education | Building the Future of Math Education
+        </div>
+
+    </div>
+
+    <!-- PAGE 9: TERMS OF USE -->
+    <div class="page" style="padding: 25mm 20mm;">
+
+        <div class="page-header">
+            <div class="report-title">PROJECT: ZETA RECOVERY</div>
+            <div>LEGAL: TERMS OF USE</div>
+        </div>
+
+        <h1 style="text-align: center; font-size: 18pt; margin-bottom: 20px;">TERMS OF USE (TOU)</h1>
+
+        <div style="text-align: center; font-size: 9pt; margin-bottom: 25px; color: #666;">
+            © 2025 Logic Labs Education. All Rights Reserved.
+        </div>
+
+        <p style="font-size: 9pt; margin-bottom: 20px; line-height: 1.6;">
+            Thank you for your purchase! By downloading this resource and accessing the Zeta Station Web Terminal, you
+            agree to the following terms:
+        </p>
+
+        <!-- Section 1 -->
+        <div style="border-left: 4px solid #172a45; padding-left: 15px; margin-bottom: 20px;">
+            <h3 style="font-size: 11pt; margin: 0 0 10px 0; color: #172a45;">1. PROPER USE</h3>
+            <p style="font-size: 9pt; margin: 0 0 8px 0; line-height: 1.5;">
+                <strong>Single Classroom Use:</strong> This license is for one teacher and their students only.
+            </p>
+            <p style="font-size: 9pt; margin: 0; line-height: 1.5;">
+                <strong>Transferability:</strong> You may not share this PDF, the terminal link, or the access codes
+                with colleagues, schools, or entire districts without purchasing additional licenses.
+            </p>
+        </div>
+
+        <!-- Section 2 -->
+        <div style="border-left: 4px solid #172a45; padding-left: 15px; margin-bottom: 20px;">
+            <h3 style="font-size: 11pt; margin: 0 0 10px 0; color: #172a45;">2. DIGITAL PROTECTION</h3>
+            <p style="font-size: 9pt; margin: 0 0 8px 0; line-height: 1.5;">
+                <strong>Web Terminal Access:</strong> The URL provided (logiclabseducation.github.io/...) is a
+                proprietary tool. You are prohibited from embedding this game into other commercial websites or
+                "cloning" the source code for redistribution.
+            </p>
+            <p style="font-size: 9pt; margin: 0; line-height: 1.5;">
+                <strong>Public Hosting:</strong> You may not upload this PDF or the mission links to public drives (like
+                Google Drive or Dropbox), school websites, or Facebook Groups where they can be accessed by
+                non-purchasers.
+            </p>
+        </div>
+
+        <!-- Section 3 -->
+        <div style="border-left: 4px solid #172a45; padding-left: 15px; margin-bottom: 20px;">
+            <h3 style="font-size: 11pt; margin: 0 0 10px 0; color: #172a45;">3. INTELLECTUAL PROPERTY</h3>
+            <p style="font-size: 9pt; margin: 0 0 8px 0; line-height: 1.5;">
+                All graphics, custom code, game logic, and narrative elements are the property of Logic Labs Education.
+            </p>
+            <p style="font-size: 9pt; margin: 0; line-height: 1.5;">
+                You may not "white-label" this game or claim the programming as your own.
+            </p>
+        </div>
+
+        <!-- Section 4 -->
+        <div style="border-left: 4px solid #4ade80; padding-left: 15px; margin-bottom: 25px;">
+            <h3 style="font-size: 11pt; margin: 0 0 10px 0; color: #4ade80;">4. FEEDBACK & SUPPORT</h3>
+            <p style="font-size: 9pt; margin: 0; line-height: 1.5;">
+                If you encounter a technical glitch or a "bug" in the station terminal, please reach out to me directly
+                at <strong>this account</strong> before leaving a review. I am a developer and will fix any issues
+                immediately!
+            </p>
+        </div>
+
+        <!-- Thank You Box -->
+        <div
+            style="background: #f9f9f9; border: 2px dashed #172a45; padding: 15px; text-align: center; margin-top: 30px;">
+            <p style="font-size: 10pt; margin: 0; font-weight: bold; color: #172a45;">
+                Thank you for supporting Logic Labs Education!
+            </p>
+            <p style="font-size: 8pt; margin: 8px 0 0 0; color: #666;">
+                Your purchase helps us create more innovative math resources for students.
+            </p>
+        </div>
+
+        <div class="page-footer" style="text-align: center; font-size: 8pt; color: #999;">
+            For additional licenses or questions, contact us through your TPT account.
+        </div>
+
+    </div>
+
+</body>
+
+</html>
